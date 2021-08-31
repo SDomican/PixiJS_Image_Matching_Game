@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+  <head>
+    <link rel="stylesheet" href="mystyle.css">
+    <script src="https://pixijs.download/release/pixi.min.js"></script>
+  </head>
+  <body>
+    <script>
+
+      // Create the application helper and add its render target to the page
+      //const app = new PIXI.Application({ width: 1280, height: 720 });
+      const app = new PIXI.Application({ view: document.getElementById("split left") });
+      document.body.appendChild(app.view);
+
+      // Create the sprite and add it to the stage
+      let sprite = PIXI.Sprite.from('sample.png');
+      app.stage.addChild(sprite);
+
+      // create a background...
+      const background = PIXI.Sprite.from('assets/backgroundImage.png');
+      background.width = app.screen.width;
+      background.height = app.screen.height;
+      app.stage.addChild(background);
+
+      const cardWidth = 120;
+      const cardHeight = 160;
+      const xMultiplier = 100;
+
+      const spritePositions = [
+      175, 75,
+      655, 75,
+      410, 325,
+      150, 465,
+      685, 445,
+  ];
+
+      const cardXPositions = [xMultiplier*1, xMultiplier*2, xMultiplier*3, xMultiplier*4, xMultiplier*5, xMultiplier*1, xMultiplier*2, xMultiplier*3, xMultiplier*4, xMultiplier*5];
+      const cardYPositions = [100, 400];
+
+      // create textures from an image path
+      const c1 = PIXI.Texture.from('assets/c01.png'); 
+      const c2 = PIXI.Texture.from('assets/c02.png'); 
+      const c3 = PIXI.Texture.from('assets/c03.png'); 
+      const c4 = PIXI.Texture.from('assets/c04.png'); 
+      const c5 = PIXI.Texture.from('assets/c05.png'); 
+      const c6 = PIXI.Texture.from('assets/c06.png'); 
+      const c7 = PIXI.Texture.from('assets/c07.png'); 
+      const c8 = PIXI.Texture.from('assets/c08.png'); 
+      const c9 = PIXI.Texture.from('assets/c09.png'); 
+      const c10 = PIXI.Texture.from('assets/c010.png');
+      const cardBack = PIXI.Texture.from('assets/card_back.png'); 
+
+      const sprites = [];
+
+      for (let i = 1; i < 11; i++) {
+
+        const sprite = new PIXI.Sprite(cardBack);
+
+        sprite.height = cardHeight;
+        sprite.width = cardWidth;
+
+        sprite.x = cardXPositions[i-1];
+
+        if(i <= 5){
+          sprite.y = cardYPositions[0];
+          }
+        else {
+          sprite.y = cardYPositions[1];
+        }
+
+        app.stage.addChild(sprite);
+
+        sprites.push(sprite);
+      } 
+
+
+      /* When the user clicks on the button,
+      toggle between hiding and showing the dropdown content */
+      function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+      }
+
+      // Close the dropdown menu if the user clicks outside of it
+      window.onclick = function(event) {
+        if (!event.target.matches('.dropbtn')) {
+          var dropdowns = document.getElementsByClassName("dropdown-content");
+          var i;
+          for (i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+              openDropdown.classList.remove('show');
+            }
+          }
+        }
+      }
+    </script>
+
+
+
+<div class="split left">
+
+</div>
+
+<div class="split right">
+  <div class="centered">
+    <div class="dropdown">
+      <button onclick="myFunction()" class="dropbtn">Dropdown</button>
+      <div id="myDropdown" class="dropdown-content">
+        <a href="#">Link 1</a>
+        <a href="#">Link 2</a>
+        <a href="#">Link 3</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+  </body>
+</html>

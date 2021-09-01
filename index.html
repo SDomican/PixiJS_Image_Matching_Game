@@ -7,24 +7,47 @@
   <body>
     <script>
 
-      // Create the application helper and add its render target to the page
-      //const app = new PIXI.Application({ width: 1280, height: 720 });
-      const app = new PIXI.Application({ view: document.getElementById("split left") });
-      document.body.appendChild(app.view);
+      class Deck{
 
-      // Create the sprite and add it to the stage
-      let sprite = PIXI.Sprite.from('sample.png');
-      app.stage.addChild(sprite);
+        constructor() {
+          this.cardOrder = [1,1,2,2,3,3,4,4,];
+          this.shuffleArray(this.cardOrder);
+
+          console.log('Initial card index');
+          for (let index = 0; index < this.cardOrder.length; index++) {
+            console.log(this.cardOrder[index]);
+          }
+          
+        }
+
+        shuffleArray(array) {
+          for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+          }
+        }
+
+      }
+
+      //Create deck
+      let deck = new Deck();
+
+      // Create the application helper and add its render target to the page
+      const app = new PIXI.Application({ width: 1280, height: 720 });
+      //const app = new PIXI.Application({ view: document.getElementById("split left") });
+      document.body.appendChild(app.view);
 
       // create a background...
       const background = PIXI.Sprite.from('assets/backgroundImage.png');
+
       background.width = app.screen.width;
       background.height = app.screen.height;
+
       app.stage.addChild(background);
 
       const cardWidth = 120;
       const cardHeight = 160;
-      const xMultiplier = 100;
+      const xMultiplier = 150;
 
       const spritePositions = [
       175, 75,
@@ -32,9 +55,9 @@
       410, 325,
       150, 465,
       685, 445,
-  ];
+    ];
 
-      const cardXPositions = [xMultiplier*1, xMultiplier*2, xMultiplier*3, xMultiplier*4, xMultiplier*5, xMultiplier*1, xMultiplier*2, xMultiplier*3, xMultiplier*4, xMultiplier*5];
+      const cardXPositions = [xMultiplier*1, xMultiplier*2, xMultiplier*3, xMultiplier*4, xMultiplier*1, xMultiplier*2, xMultiplier*3, xMultiplier*4, xMultiplier*1, xMultiplier*2, xMultiplier*3, xMultiplier*4];
       const cardYPositions = [100, 400];
 
       // create textures from an image path
@@ -52,27 +75,47 @@
 
       const sprites = [];
 
-      for (let i = 1; i < 11; i++) {
+      for (let i = 1; i < 9; i++) {
 
         const sprite = new PIXI.Sprite(cardBack);
 
         sprite.height = cardHeight;
         sprite.width = cardWidth;
 
+        sprite.isFlipped = false;
+        sprite.interactive = true;
+
+        sprite.indexNum = deck.cardOrder[i-1];
+
         sprite.x = cardXPositions[i-1];
 
-        if(i <= 5){
+        if(i <= 4){
           sprite.y = cardYPositions[0];
           }
         else {
           sprite.y = cardYPositions[1];
         }
 
+        sprite.on('pointertap', (event) => { 
+          alert('ping');
+          /*if(sprite.isFlipped !== true){
+        
+          let artString = 'c0';
+
+          artString += sprite.indexNum;
+          sprite.texture = eval(artString);
+          sprite.isFlipped = true;
+          }*/ 
+        });
+
         app.stage.addChild(sprite);
 
         sprites.push(sprite);
       } 
 
+      for (let i = 0; i < 8; i++){
+        console.log(sprites[i].indexNum);
+      }
 
       /* When the user clicks on the button,
       toggle between hiding and showing the dropdown content */
@@ -97,22 +140,20 @@
 
 
 
-<div class="split left">
+    <div class="split left"></div>
 
-</div>
-
-<div class="split right">
-  <div class="centered">
-    <div class="dropdown">
-      <button onclick="myFunction()" class="dropbtn">Dropdown</button>
-      <div id="myDropdown" class="dropdown-content">
-        <a href="#">Link 1</a>
-        <a href="#">Link 2</a>
-        <a href="#">Link 3</a>
+    <div class="split right">
+      <div class="centered">
+        <div class="dropdown">
+          <button onclick="myFunction()" class="dropbtn">Dropdown</button>
+          <div id="myDropdown" class="dropdown-content">
+            <a href="#">8 tiles</a>
+            <a href="#">16 tiles</a>
+            <a href="#">24 tiles</a>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
   </body>
 </html>

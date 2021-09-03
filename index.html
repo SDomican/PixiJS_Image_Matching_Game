@@ -33,8 +33,8 @@
       let deck = new Deck();
 
       // Create the application helper and add its render target to the page
-      const app = new PIXI.Application({ width: 1280, height: 720 });
-      //const app = new PIXI.Application({ view: document.getElementById("split left") });
+      //const app = new PIXI.Application({ width: 1280, height: 720 });
+      const app = new PIXI.Application({ view: document.getElementById("split left") });
       document.body.appendChild(app.view);
 
       // create a background...
@@ -48,6 +48,7 @@
       const cardWidth = 120;
       const cardHeight = 160;
       const xMultiplier = 150;
+
 
       const spritePositions = [
       175, 75,
@@ -74,6 +75,8 @@
       const cardBack = PIXI.Texture.from('assets/card_back.png'); 
 
       const sprites = [];
+      let isACardFlipped = false;
+      let isASecondCardFlipped = false;
 
       for (let i = 1; i < 9; i++) {
 
@@ -97,21 +100,38 @@
         }
 
         sprite.on('pointertap', (event) => { 
-          alert('ping');
-          /*if(sprite.isFlipped !== true){
+          if(sprite.isFlipped !== true && isASecondCardFlipped === false){
         
-          let artString = 'c0';
+          let artString = 'c';
 
           artString += sprite.indexNum;
           sprite.texture = eval(artString);
           sprite.isFlipped = true;
-          }*/ 
+
+          if(isACardFlipped === false){isACardFlipped = true;}
+          else {
+            isASecondCardFlipped = true;
+            setTimeout(revertCards, 1500);
+          }
+
+          } 
         });
 
         app.stage.addChild(sprite);
 
         sprites.push(sprite);
       } 
+
+      function revertCards(){
+        isACardFlipped = false;
+        isASecondCardFlipped = false;
+        for (let i = 0; i < sprites.length; i++){
+          sprites[i].texture = cardBack;
+          sprites[i].isFlipped = false;
+        }
+        
+        
+      }
 
       for (let i = 0; i < 8; i++){
         console.log(sprites[i].indexNum);
@@ -139,9 +159,7 @@
     </script>
 
 
-
     <div class="split left"></div>
-
     <div class="split right">
       <div class="centered">
         <div class="dropdown">

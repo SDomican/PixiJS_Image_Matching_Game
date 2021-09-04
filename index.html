@@ -11,13 +11,7 @@
 
         constructor() {
           this.cardOrder = [1,1,2,2,3,3,4,4,];
-          this.shuffleArray(this.cardOrder);
-
-          console.log('Initial card index');
-          for (let index = 0; index < this.cardOrder.length; index++) {
-            console.log(this.cardOrder[index]);
-          }
-          
+          this.shuffleArray(this.cardOrder);  
         }
 
         shuffleArray(array) {
@@ -44,6 +38,8 @@
       background.height = app.screen.height;
 
       app.stage.addChild(background);
+
+      let numberOfCards = 8;
 
       const cardWidth = 120;
       const cardHeight = 160;
@@ -123,14 +119,58 @@
       } 
 
       function revertCards(){
+        
+        checkMatchingCardsFlipped();
+        
         isACardFlipped = false;
         isASecondCardFlipped = false;
         for (let i = 0; i < sprites.length; i++){
           sprites[i].texture = cardBack;
           sprites[i].isFlipped = false;
         }
+      
         
-        
+      }
+
+      function checkMatchingCardsFlipped(){
+          let firstNum = -1;
+          let secondNum = -1;
+          let firstSpriteIndex = -1;
+          let secondSpriteIndex = -1;
+
+          for (let i = 0; i < sprites.length; i++){
+            
+            if (sprites[i].isFlipped === true){
+              
+              if(firstNum === -1){
+                firstNum = sprites[i].indexNum;
+                firstSpriteIndex = i;
+              }
+              else{
+                secondNum = sprites[i].indexNum;
+                secondSpriteIndex = i;
+              }
+            }
+          }
+
+          if(firstNum !== -1 && (firstNum === secondNum)){
+            removeMatchingCards(firstNum);
+          }
+
+        }
+
+      function removeMatchingCards(numberToRemove){
+
+        numberOfCards -= 2;
+        let indexPositionsToRemove = [];
+
+        for (let i = 0; i < sprites.length; i++){
+          if(sprites[i].indexNum === numberToRemove){
+            indexPositionsToRemove.push(i);
+            sprites[i].parent.removeChild(sprites[i]);
+          }
+        }
+
       }
 
       for (let i = 0; i < 8; i++){

@@ -16,7 +16,9 @@
             this.cardOrder.push(i+1);
           }
           this.shuffleArray(this.cardOrder);  
+          /*Uncomment to show card order in the console log
           for(let i =0;i<this.cardOrder.length;i++){console.log(this.cardOrder[i]);}
+          */
         }
 
         shuffleArray(array) {
@@ -40,6 +42,60 @@
       const c9 = PIXI.Texture.from('assets/c09.png'); 
       const c10 = PIXI.Texture.from('assets/c010.png');
       const cardBack = PIXI.Texture.from('assets/card_back.png'); 
+
+      const style = new PIXI.TextStyle({
+        fontFamily: 'Arial',
+        fontSize: 20,
+        fontStyle: 'italic',
+        fontWeight: 'bold',
+        fill: ['#ffffff', '#00ff99'], // gradient
+        stroke: '#4a1850',
+        strokeThickness: 5,
+        dropShadow: true,
+        dropShadowColor: '#000000',
+        dropShadowBlur: 4,
+        dropShadowAngle: Math.PI / 6,
+        dropShadowDistance: 6,
+        wordWrap: true,
+        wordWrapWidth: 440,
+        lineJoin: 'round',
+      });
+
+      let timerText = new PIXI.Text('5: 00', style);
+
+      let timer;
+      let minutes;
+      let seconds;
+
+      let countdown = setInterval(function(){
+        if(timer >= 0){
+          timer--;  
+        }
+        minutes = Math.floor(timer / 60);
+        seconds = timer - minutes * 60;
+
+        if(timer === 0){
+          alert('You lose!');
+          timerText.text = '0: 00';
+          destroyGame();
+          newGame(8);
+        }
+
+        else if(seconds<10){
+          timerText.text = minutes + ': 0' + seconds;
+        }
+        else{
+          timerText.text = minutes + ': ' + seconds;
+        }
+
+      }, 1000);
+
+      const text = new PIXI.Text('Time left:', style);
+
+      text.x = 25;
+      text.y = 50;
+      timerText.x = 25;
+      timerText.y = 75;
 
       const cardWidth = 100;
       const cardHeight = 140;
@@ -72,6 +128,11 @@
 
       function newGame(gameSize){
 
+        timer = 300;
+        minutes = Math.floor(timer / 60);
+        seconds = timer - minutes * 60;
+        timerText.text = '5: 00';
+
         //Create deck
         let deck = new Deck(gameSize);
 
@@ -85,6 +146,8 @@
         background.height = app.screen.height;
 
         app.stage.addChild(background);
+        app.stage.addChild(text);
+        app.stage.addChild(timerText);
 
         numberOfCards = gameSize;
 
@@ -100,7 +163,6 @@
         let spriteArray = [];
 
         for (let i = 1; i < gameSize+1; i++) {
-          //console.log('iteration ' + (i));
           const sprite = new PIXI.Sprite(cardBack);
 
           sprite.height = cardHeight;
